@@ -29,7 +29,7 @@ class MainGUI (Frame):
         bg = "white", height = 1, font = ("TexGyreAdventor",20))
         # put it in the top row, spanning across all four
         #  columns; and expand it on all four sides
-        self.display.grid (row = 3, column = 0, columnspan = 2, \
+        self.display.grid (row = 2, rowspan = 3, column = 0, columnspan = 2, \
                         sticky = E + W + N + S)
                 # there are 6 rows (0 through 5)
         for row in range (6):
@@ -39,12 +39,7 @@ class MainGUI (Frame):
             Grid.columnconfigure (self, col, weight = 1)
 
         #################### the first row ####################
-        # (
-        # first, fetch and store the image
-        # to work best on the RPi, images should be 115x115
-        #  pixels
-        # otherwise, may need to add .subsample(n)
-        # next, create the button
+        
         button = Button (self, bg = "white", text = "CLOTHES", \
                         borderwidth = 0, highlightthickness = 0,\
                         activebackground = "white", command = lambda:\
@@ -157,51 +152,168 @@ class MainGUI (Frame):
         # put the button in the proper row and column
         button.grid (row = 5, column = 5, sticky = N+S+E+W)
 
-        img = PhotoImage (file = "plus.gif")
+        img = PhotoImage (file = "cart2.gif")
         # next, create the button
         button = Button (self, bg = "white", image = img, \
                         borderwidth = 0, highlightthickness = 0,\
-                        activebackground = "white", height = 1, width = 1, command = lambda:\
-                         self.process ("+"))
+                        activebackground = "white", height = 10, width = 10, command = lambda:\
+                         self.process ("cart1"))
         # set the button's image
         button.image = img
         # put the button in the proper row and column
         button.grid (row = 0, column = 0, sticky = N+S+E+W)
 
 
-        img = PhotoImage (file = item1.image)
-        # next, create the button
+        n = len(item_list) - 1
+        x = item_list [n]
+            
+        img = PhotoImage (file = x.image)
         button = Button (self, bg = "white", image = img, \
                         borderwidth = 0, highlightthickness = 0,\
                         activebackground = "white", height = 100, width = 100, command = lambda:\
                          self.process ("item"))
-        # set the button's image
         button.image = img
-        # put the button in the proper row and column
         button.grid (row = 2, rowspan = 3, column = 4, columnspan = 2, sticky = N+S+E+W)
+
 
 
         self.pack (fill = BOTH, expand = 1)
 
-        #process button presses 
-    def process (self, button):
-        cart_list = []
+        #process button presses
         
-        if (button == "added to cart"):
-            self.display ["text"] = ""
-            cart_list.append (item1)
+    
+    def process (self, button):
 
-        elif (button == "+"):
-            self.display ["text"] = cart_list
+            
+        if (button == "added to cart"):
+##            m = len(item_list) -1
+##            y = item_list [m]
+##            cart_list.append (y.type)
+##            print m
+##            
+##            item_list.pop()
+
+            if (len (item_list) <= 0):
+                self.display ["text"] = "NO MORE ITEMS"
+                
+            
+            elif (len (item_list) > 0):
+                m = len(item_list) -1
+                y = item_list [m]
+                cart_list.append (y)
+                print m
+                
+                item_list.pop()
+                
+                self.display ["text"] = "Added to Cart"
+                n = len(item_list) - 1
+                x = item_list [n]
+
+                
+                img = PhotoImage (file = x.image)
+                button = Button (self, bg = "white", image = img, \
+                                borderwidth = 0, highlightthickness = 0,\
+                                activebackground = "white", height = 100, width = 100, command = lambda:\
+                                 self.process ("item"))
+                button.image = img
+                button.grid (row = 2, rowspan = 3, column = 4, columnspan = 2, sticky = N+S+E+W)
+
+        elif (button == "passed item"):
+            
+            item_list.pop()
+            self.display ["text"] = "Item passed"
+            n = len(item_list) - 1
+            x = item_list [n]
+            
+            
+            img = PhotoImage (file = x.image)
+            button = Button (self, bg = "white", image = img, \
+                            borderwidth = 0, highlightthickness = 0,\
+                            activebackground = "white", height = 100, width = 100, command = lambda:\
+                             self.process ("item"))
+            button.image = img
+            button.grid (row = 2, rowspan = 3, column = 4, columnspan = 2, sticky = N+S+E+W)
+
+            
+
+
+
+        elif (button == "cart1"):
+            g = 0
+            cart_items = []
+            cart_price = []
+
+            while g < len (cart_list):
+                f = cart_list[g]
+                cart_items.append(f.type)
+                g += 1
+
+            self.display ["text"] = cart_items
+            self.display ["text"] = z
+##            h = len(cart_list) - 1
+##            j = cart_list [h]
+##            self.display ["text"] = "Total Price: \n ${}" .format(j.price)
+
+            
+
+            
+##            img = PhotoImage (file = j.image)
+##            button = Button (self, bg = "white", image = img, \
+##                                borderwidth = 0, highlightthickness = 0,\
+##                                activebackground = "white", height = 100, width = 100)
+##            button.image = img
+##            button.grid (row = 2, rowspan = 3, column = 4, columnspan = 2, sticky = N+S+E+W)
+##
+##
+##            k = cart_list [h-1]
+##            img = PhotoImage (file = k.image)
+##            button = Button (self, bg = "white", image = img, \
+##                                borderwidth = 0, highlightthickness = 0,\
+##                                activebackground = "white", height = 100, width = 100)
+##            button.image = img
+##            button.grid (row = 2, rowspan = 3, column = 7, columnspan = 2, sticky = N+S+E+W)
+##
+##            self.display ["text"] = "Total Price: \n ${}" .format(j.price + k.price)
+##
+##
+##
+##
+##
+##            button = Button (self, bg = "white", text = "Checkout All Items", \
+##                        borderwidth = 0, highlightthickness = 0,\
+##                        activebackground = "white", height = 10, width = 10)
+##
+##            button.grid (row = 5, column = 5, sticky = N+S+E+W)
+##
+##            button = Button (self, bg = "white", text = "Clear Cart", \
+##                        borderwidth = 0, highlightthickness = 0,\
+##                        activebackground = "white", height = 10, width = 10)
+##
+##            button.grid (row = 5, column = 4, sticky = N+S+E+W)
+
+
+
+
+
+
+
+
+
+
+
+
 
         elif (button == "item"):
-            self.display ["text"] = item1
-##            back = self.display ["text"]
-##            self.display ["text"] = str(back[:-1])
+            y = len(item_list) - 1
+            x = item_list [y]
+            self.display ["text"] = x
+            
             
             
         else:
             self.display ["text"] += button
+
+        
 ########################################################################################################
 
 class Item (object):
@@ -218,7 +330,8 @@ class Item (object):
         self.image = image
 
     def __str__ (self):
-        return "Price: ${}" .format (self.price)
+        return "Type: {} \n Price: ${} \n Seller: {} \n Location: {} \n Condition: {} \n Brand: {} \n Color: {} \n Descrpition: {} " .format (self.type, self.price, self.seller, self.location, self.condition,\
+                                                                                                                                  self.brand, self.color, self.description)
 
 class Clothes (Item):
     def __init__ (self, size):
@@ -242,8 +355,8 @@ class Vehicle (Item):
         self.drive = drivetrain
         
 class Accessories (Item):
-    def __init__ (self):
-        Item.__init__ (self, price, seller, location, weight, condition, brand, color, description, type)
+    def __init__ (self, price, seller, location, weight, condition, brand, color, description, type, image):
+        Item.__init__ (self, price, seller, location, weight, condition, brand, color, description, type, image)
 
 class Entertainment (Item):
     def __init__ (self, year, title):
@@ -252,10 +365,12 @@ class Entertainment (Item):
         self.title = title
         
 class Furniture (Item):
-    def __init__ (self, dimensions, material):
-        Item.__init__ (self, price, seller, location, weight, condition, brand, color, description, type)
-        self.dimensions = dimentsions
-        self.material = material
+    def __init__ (self, price, seller, location, weight, condition, brand, color, description, type, image):
+        Item.__init__ (self, price, seller, location, weight, condition, brand, color, description, type, image)
+        
+
+    def __str__ (self):
+        return "NO MORE ITEMS AVAILABLE"
 
         
 class Sports_Outdoors (Item):
@@ -276,9 +391,19 @@ class Misc (Item):
     def __init__ (self):
         Item.__init__ (self, price, seller, location, weight, condition, brand, color, description, type)
         
-item1 = Item (100, "andrew", "ruston", 12, "used", "nike", "red", "boring", "ball", "truck.gif")
+item1 = Item (100000, "Elon", "CA", 12000, "used", "Tesla", "Grey", "Zoom Zoom", "Truck", "truck.gif")
 
-print item1.seller
+hat = Accessories (50000, "Elon", "CA", 12000, "used", "Tesla", "Grey", "Zoom Zoom", "hat", "hat.gif")
+
+item3 = Item (20, "Elon", "CA", 12000, "used", "Tesla", "Grey", "Zoom Zoom", "shoe", "shoe.gif")
+
+##item0 = Furniture (20, "Elon", "CA", 12000, "used", "Tesla", "Grey", "Zoom Zoom", "shoe", "xmark.gif")
+
+item_list = [item1, hat, item3]
+
+cart_list = []
+
+
 
 # create the window
 window = Tk ()
